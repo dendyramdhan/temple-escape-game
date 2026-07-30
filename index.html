@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Temple Escape — Text Adventure RPG</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Temple Escape: Enhanced Edition</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,14 +13,16 @@
   <div id="app">
     <header>
       <h1>Temple Escape</h1>
-      <p class="subtitle">A Text Adventure RPG</p>
+      <p class="subtitle">Enhanced Edition — Text Adventure RPG</p>
     </header>
 
     <div id="status-bar">
+      <div class="stat"><span class="label">Lv</span> <span id="level">1</span></div>
       <div class="stat"><span class="label">HP</span> <span id="hp">100</span>/<span id="max-hp">100</span></div>
-      <div class="stat"><span class="label">ATK</span> <span id="atk">10</span></div>
-      <div class="stat"><span class="label">DEF</span> <span id="def">5</span></div>
+      <div class="stat"><span class="label">ATK</span> <span id="atk">12</span></div>
+      <div class="stat"><span class="label">DEF</span> <span id="def">6</span></div>
       <div class="stat"><span class="label">Gold</span> <span id="gold">0</span></div>
+      <div class="stat exp"><span class="label">EXP</span> <span id="exp">0</span>/<span id="exp-next">50</span></div>
     </div>
 
     <div id="game-area">
@@ -31,7 +33,12 @@
     </div>
 
     <div id="inventory-panel">
-      <h3>Inventory</h3>
+      <h3>Inventory & Equipment</h3>
+      <div id="equipment">
+        <div>Weapon: <span id="eq-weapon">None</span></div>
+        <div>Armor: <span id="eq-armor">None</span></div>
+        <div>Accessory: <span id="eq-accessory">None</span></div>
+      </div>
       <ul id="inventory-list"></ul>
     </div>
 

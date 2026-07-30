@@ -1,14 +1,15 @@
 :root {
-  --bg: #0d0b0a;
-  --panel: #1a1512;
-  --border: #3d2b1f;
-  --gold: #c9a227;
-  --gold-dim: #8a6d1f;
-  --text: #e8dcc8;
-  --text-dim: #a89a82;
+  --bg: #0a0908;
+  --panel: #16120f;
+  --border: #3a2a1c;
+  --gold: #d4af37;
+  --gold-dim: #9a7b2c;
+  --text: #e6d9c4;
+  --text-dim: #a8997e;
   --danger: #c0392b;
   --success: #27ae60;
-  --accent: #8b4513;
+  --accent: #8b5a2b;
+  --level: #6bb3f0;
 }
 
 * {
@@ -24,98 +25,102 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  padding: 16px;
+  padding: 12px;
   background-image: 
-    radial-gradient(ellipse at top, #1a120b 0%, transparent 60%),
-    radial-gradient(ellipse at bottom, #0a0806 0%, transparent 50%);
+    radial-gradient(ellipse at top, #1c140c 0%, transparent 55%),
+    radial-gradient(ellipse at bottom, #080605 0%, transparent 50%);
 }
 
 #app {
   width: 100%;
-  max-width: 720px;
+  max-width: 740px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 header {
   text-align: center;
-  padding: 12px 0;
+  padding: 10px 0 8px;
   border-bottom: 2px solid var(--border);
 }
 
 header h1 {
   font-family: 'Cinzel', serif;
-  font-size: 2.2rem;
+  font-size: 1.9rem;
   color: var(--gold);
-  letter-spacing: 3px;
-  text-shadow: 0 0 20px rgba(201, 162, 39, 0.3);
+  letter-spacing: 2px;
+  text-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
 }
 
 .subtitle {
   color: var(--text-dim);
-  font-size: 0.85rem;
-  margin-top: 4px;
-  letter-spacing: 1px;
+  font-size: 0.8rem;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
 }
 
 #status-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px 14px;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 12px 16px;
+  padding: 10px 12px;
   justify-content: space-around;
+  font-size: 0.88rem;
 }
 
 .stat {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.95rem;
+  gap: 5px;
 }
 
 .stat .label {
   color: var(--gold-dim);
   font-weight: 500;
-  min-width: 32px;
+  min-width: 28px;
+}
+
+.stat.exp .label {
+  color: var(--level);
 }
 
 #game-area {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 20px;
-  min-height: 320px;
+  padding: 16px;
+  min-height: 300px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 #location-title {
   font-family: 'Cinzel', serif;
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   color: var(--gold);
   border-bottom: 1px solid var(--border);
-  padding-bottom: 8px;
+  padding-bottom: 6px;
 }
 
 #description {
-  line-height: 1.6;
+  line-height: 1.55;
   color: var(--text);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   white-space: pre-wrap;
 }
 
 #message-log {
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.35);
   border-left: 3px solid var(--gold-dim);
-  padding: 10px 14px;
-  font-size: 0.9rem;
+  padding: 9px 12px;
+  font-size: 0.88rem;
   color: var(--text-dim);
-  min-height: 40px;
+  min-height: 38px;
   border-radius: 0 6px 6px 0;
 }
 
@@ -129,43 +134,48 @@ header h1 {
   color: #2ecc71;
 }
 
+#message-log.levelup {
+  border-left-color: var(--level);
+  color: #6bb3f0;
+}
+
 #choices {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
   margin-top: auto;
 }
 
 .btn {
-  background: linear-gradient(180deg, #3d2b1f, #2a1c14);
+  background: linear-gradient(180deg, #3a2a1c, #261c13);
   border: 1px solid var(--border);
   color: var(--text);
-  padding: 12px 16px;
+  padding: 11px 14px;
   border-radius: 6px;
   font-family: 'Roboto Mono', monospace;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.15s ease;
   text-align: left;
 }
 
 .btn:hover {
-  background: linear-gradient(180deg, #4a3525, #3d2b1f);
+  background: linear-gradient(180deg, #4a3525, #3a2a1c);
   border-color: var(--gold-dim);
   color: var(--gold);
-  transform: translateX(4px);
+  transform: translateX(3px);
 }
 
 .btn:active {
-  transform: translateX(2px);
+  transform: translateX(1px);
 }
 
 .btn.secondary {
   background: transparent;
   border-color: var(--border);
   color: var(--text-dim);
-  padding: 8px 14px;
-  font-size: 0.85rem;
+  padding: 8px 12px;
+  font-size: 0.82rem;
 }
 
 .btn.secondary:hover {
@@ -175,41 +185,65 @@ header h1 {
 }
 
 .btn.danger {
-  border-color: var(--danger);
+  border-color: #8b2e25;
 }
 
 .btn.danger:hover {
-  background: rgba(192, 57, 43, 0.2);
+  background: rgba(192, 57, 43, 0.18);
   color: #e74c3c;
+}
+
+.btn.skill {
+  border-color: #2c5a8b;
+}
+
+.btn.skill:hover {
+  background: rgba(42, 90, 140, 0.2);
+  color: #6bb3f0;
 }
 
 #inventory-panel {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 14px 16px;
+  padding: 12px 14px;
 }
 
 #inventory-panel h3 {
   font-family: 'Cinzel', serif;
   color: var(--gold-dim);
-  font-size: 1rem;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+#equipment {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.82rem;
+  color: var(--text-dim);
   margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--border);
+}
+
+#equipment span {
+  color: var(--gold);
 }
 
 #inventory-list {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 #inventory-list li {
   background: rgba(0,0,0,0.35);
   border: 1px solid var(--border);
-  padding: 6px 12px;
+  padding: 5px 10px;
   border-radius: 4px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-dim);
 }
 
@@ -220,21 +254,20 @@ header h1 {
 
 #footer {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-/* Modal */
 #modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.88);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
-  padding: 20px;
+  padding: 16px;
 }
 
 #modal.hidden {
@@ -245,33 +278,40 @@ header h1 {
   background: var(--panel);
   border: 2px solid var(--gold);
   border-radius: 12px;
-  padding: 28px;
-  max-width: 420px;
+  padding: 24px;
+  max-width: 400px;
   text-align: center;
 }
 
 .modal-content h2 {
   font-family: 'Cinzel', serif;
   color: var(--gold);
-  margin-bottom: 12px;
-  font-size: 1.6rem;
+  margin-bottom: 10px;
+  font-size: 1.45rem;
 }
 
 .modal-content p {
   color: var(--text);
   line-height: 1.5;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  font-size: 0.92rem;
+  white-space: pre-wrap;
 }
 
-/* Responsive */
 @media (max-width: 500px) {
   header h1 {
-    font-size: 1.7rem;
+    font-size: 1.55rem;
   }
   #status-bar {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    gap: 6px 10px;
   }
   #game-area {
-    padding: 16px;
+    padding: 12px;
+    min-height: 260px;
+  }
+  .btn {
+    padding: 10px 12px;
+    font-size: 0.85rem;
   }
 }
