@@ -1,5 +1,5 @@
 // =====================================================
-// TEMPLE ESCAPE — Enhanced + Sound + Minimap + FX
+// TEMPLE ESCAPE — Enhanced + Sound + Minimap + FX + Rank
 // =====================================================
 
 const LOCATIONS = {
@@ -35,7 +35,6 @@ const ENEMIES = {
   shadow_beast: { name: "Shadow Beast", hp: 55, maxHp: 55, atk: 14, def: 3, exp: 40, gold: 30, drops: ["greater_potion"], desc: "A creature of pure darkness. Its form shifts and writhes." }
 };
 
-// Minimap layout (3x4-ish logical positions)
 const MAP_LAYOUT = [
   [null, "gate", null],
   [null, "corridor", null],
@@ -67,11 +66,8 @@ function createInitialState() {
 
 function $(id) { return document.getElementById(id); }
 
-// ===== SOUND =====
 function initAudio() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   if (audioCtx.state === "suspended") audioCtx.resume();
 }
 
@@ -113,7 +109,6 @@ function flash(type) {
   setTimeout(() => { el.className = ""; }, 180);
 }
 
-// ===== CORE =====
 function setMessage(text, type = "normal") {
   state.message = text;
   state.messageType = type;
@@ -159,6 +154,20 @@ function updateStatus() {
   $("eq-accessory").textContent = state.equipped.accessory ? ITEMS[state.equipped.accessory].name : "None";
 }
 
+function updateEnemyBar() {
+  const wrap = $("enemy-bar-wrap");
+  if (!state.combat) {
+    wrap.classList.add("hidden");
+    return;
+  }
+  const enemy = ENEMIES[state.combat.enemyKey];
+  wrap.classList.remove("hidden");
+  $("enemy-name").textContent = enemy.name;
+  $("enemy-hp-text").textContent = Math.max(0, state.combat.enemyHp) + " / " + enemy.maxHp;
+  const pct = Math.max(0, Math.min(100, (state.combat.enemyHp / enemy.maxHp) * 100));
+  $("enemy-hp-bar").style.width = pct + "%";
+}
+
 function renderMinimap() {
   const container = $("minimap");
   container.innerHTML = "";
@@ -169,8 +178,7 @@ function renderMinimap() {
       if (!key) {
         cell.classList.add("empty");
       } else {
-        const loc = LOCATIONS[key];
-        cell.textContent = loc.short;
+        cell.textContent = LOCATIONS[key].short;
         if (state.visited.includes(key)) cell.classList.add("visited");
         if (state.location === key) cell.classList.add("current");
       }
@@ -246,6 +254,7 @@ function render() {
   updateStatus();
   renderInventory();
   renderMinimap();
+  updateEnemyBar();
 
   const loc = LOCATIONS[state.location];
   $("location-title").textContent = loc.name;
@@ -328,28 +337,33 @@ function render() {
 }
 
 function moveTo(dest) {
-  const loc = LOCATIONS[dest];
-  if (!state.visited.includes(dest)) state.visited.push(dest);
+  const gameArea = $("game-area");
+  gameArea.classList.add("fade-out");
 
-  let enemyKey = loc.enemy;
-  let alreadyDefeated = false;
-  if (enemyKey === "temple_guardian") alreadyDefeated = state.flags.guardianDefeated;
-  if (enemyKey === "skeleton_warrior") alreadyDefeated = state.flags.skeletonDefeated;
-  if (enemyKey === "shadow_beast") alreadyDefeated = state.flags.shadowDefeated;
+  setTimeout(() => {
+    const loc = LOCATIONS[dest];
+    if (!state.visited.includes(dest)) state.visited.push(dest);
 
-  if (enemyKey && !alreadyDefeated) {
-    const enemy = ENEMIES[enemyKey];
-    state.combat = { enemyKey, enemyHp: enemy.hp, defending: false };
-    setMessage(`A ${enemy.name} appears! ${enemy.desc}`, "danger");
-    state.location = dest;
-    sfx("hit");
+    let enemyKey = loc.enemy;
+    let alreadyDefeated = false;
+    if (enemyKey === "temple_guardian") alreadyDefeated = state.flags.guardianDefeated;
+    if (enemyKey === "skeleton_warrior") alreadyDefeated = state.flags.skeletonDefeated;
+    if (enemyKey === "shadow_beast") alreadyDefeated = state.flags.shadowDefeated;
+
+    if (enemyKey && !alreadyDefeated) {
+      const enemy = ENEMIES[enemyKey];
+      state.combat = { enemyKey, enemyHp: enemy.hp, defending: false };
+      setMessage(`A ${enemy.name} appears! ${enemy.desc}`, "danger");
+      state.location = dest;
+      sfx("hit");
+    } else {
+      state.location = dest;
+      setMessage(`You enter the ${loc.name}.`, "normal");
+    }
+
+    gameArea.classList.remove("fade-out");
     render();
-    return;
-  }
-
-  state.location = dest;
-  setMessage(`You enter the ${loc.name}.`, "normal");
-  render();
+  }, 180);
 }
 
 function takeItem(key) {
@@ -410,7 +424,7 @@ function useItem(key) {
 function renderCombat() {
   const enemy = ENEMIES[state.combat.enemyKey];
   $("location-title").textContent = `⚔ COMBAT — ${enemy.name}`;
-  $("description").textContent = `${enemy.desc}\n\nEnemy HP: ${state.combat.enemyHp} / ${enemy.maxHp}`;
+  $("description").textContent = enemy.desc;
 
   clearChoices();
   addChoice("Attack", () => playerAttack(1.0));
@@ -454,6 +468,7 @@ function playerAttack(multiplier = 1.0, hitChance = 0.92) {
   }
 
   state.combat.enemyHp -= damage;
+  updateEnemyBar();
 
   if (state.combat.enemyHp <= 0) {
     state.gold += enemy.gold;
@@ -522,14 +537,27 @@ function calculateScore() {
   state.score = score;
 }
 
+function getRank(score) {
+  if (score >= 700) return "S";
+  if (score >= 500) return "A";
+  if (score >= 300) return "B";
+  return "C";
+}
+
 function showEnding(victory) {
   const modal = $("modal");
   const title = $("modal-title");
   const text = $("modal-text");
   const btn = $("modal-btn");
+  const rankEl = $("rank-badge");
 
   if (victory) {
     title.textContent = "YOU ESCAPED";
+    const rank = getRank(state.score);
+    rankEl.textContent = rank;
+    rankEl.className = "rank-" + rank;
+    rankEl.classList.remove("hidden");
+
     let extra = `\n\nFinal Score: ${state.score}\nLevel: ${state.level}  |  Gold: ${state.gold}`;
     if (state.flags.treasureFound) extra += "\n\n✦ You claimed the Ancient Amulet and the full treasure!";
     else extra += "\n\nYou escaped, but left secrets behind.";
@@ -538,6 +566,7 @@ function showEnding(victory) {
     sfx("win");
   } else {
     title.textContent = "YOU HAVE FALLEN";
+    rankEl.classList.add("hidden");
     text.textContent = "The temple claims another soul.\n\nYour adventure ends here.";
     btn.textContent = "TRY AGAIN";
     sfx("lose");
@@ -581,8 +610,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (soundEnabled) sfx("click");
   };
 
-  // Unlock audio on first interaction
   document.body.addEventListener("click", () => initAudio(), { once: true });
-
   startGame(true);
 });
