@@ -7,22 +7,57 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="bg-overlay"></div>
   <div id="app">
     <header>
-      <h1>Temple Escape</h1>
-      <p class="subtitle">Enhanced Edition — Text Adventure RPG</p>
+      <div class="title-glow">
+        <h1>TEMPLE ESCAPE</h1>
+        <p class="subtitle">ENHANCED EDITION</p>
+      </div>
     </header>
 
     <div id="status-bar">
-      <div class="stat"><span class="label">Lv</span> <span id="level">1</span></div>
-      <div class="stat"><span class="label">HP</span> <span id="hp">100</span>/<span id="max-hp">100</span></div>
-      <div class="stat"><span class="label">ATK</span> <span id="atk">12</span></div>
-      <div class="stat"><span class="label">DEF</span> <span id="def">6</span></div>
-      <div class="stat"><span class="label">Gold</span> <span id="gold">0</span></div>
-      <div class="stat exp"><span class="label">EXP</span> <span id="exp">0</span>/<span id="exp-next">50</span></div>
+      <div class="stat-row">
+        <div class="stat level-stat">
+          <span class="label">LVL</span>
+          <span id="level" class="value">1</span>
+        </div>
+        <div class="stat">
+          <span class="label">ATK</span>
+          <span id="atk" class="value">12</span>
+        </div>
+        <div class="stat">
+          <span class="label">DEF</span>
+          <span id="def" class="value">6</span>
+        </div>
+        <div class="stat gold-stat">
+          <span class="label">GOLD</span>
+          <span id="gold" class="value">0</span>
+        </div>
+      </div>
+
+      <div class="bar-group">
+        <div class="bar-label">
+          <span>HP</span>
+          <span><span id="hp">100</span> / <span id="max-hp">100</span></span>
+        </div>
+        <div class="bar-track hp-track">
+          <div id="hp-bar" class="bar-fill hp-fill"></div>
+        </div>
+      </div>
+
+      <div class="bar-group">
+        <div class="bar-label">
+          <span>EXP</span>
+          <span><span id="exp">0</span> / <span id="exp-next">50</span></span>
+        </div>
+        <div class="bar-track exp-track">
+          <div id="exp-bar" class="bar-fill exp-fill"></div>
+        </div>
+      </div>
     </div>
 
     <div id="game-area">
@@ -33,27 +68,28 @@
     </div>
 
     <div id="inventory-panel">
-      <h3>Inventory & Equipment</h3>
+      <h3>⚔ EQUIPMENT & INVENTORY</h3>
       <div id="equipment">
-        <div>Weapon: <span id="eq-weapon">None</span></div>
-        <div>Armor: <span id="eq-armor">None</span></div>
-        <div>Accessory: <span id="eq-accessory">None</span></div>
+        <div class="eq-slot"><span class="eq-label">Weapon</span><span id="eq-weapon">None</span></div>
+        <div class="eq-slot"><span class="eq-label">Armor</span><span id="eq-armor">None</span></div>
+        <div class="eq-slot"><span class="eq-label">Accessory</span><span id="eq-accessory">None</span></div>
       </div>
       <ul id="inventory-list"></ul>
     </div>
 
     <div id="footer">
-      <button id="btn-save" class="btn secondary">Save</button>
-      <button id="btn-load" class="btn secondary">Load</button>
-      <button id="btn-restart" class="btn secondary">Restart</button>
+      <button id="btn-save" class="btn secondary">SAVE</button>
+      <button id="btn-load" class="btn secondary">LOAD</button>
+      <button id="btn-restart" class="btn secondary">RESTART</button>
     </div>
   </div>
 
   <div id="modal" class="hidden">
     <div class="modal-content">
+      <div class="modal-glow"></div>
       <h2 id="modal-title"></h2>
       <p id="modal-text"></p>
-      <button id="modal-btn" class="btn">Continue</button>
+      <button id="modal-btn" class="btn primary">CONTINUE</button>
     </div>
   </div>
 

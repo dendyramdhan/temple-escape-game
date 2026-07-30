@@ -1,7 +1,5 @@
 // =====================================================
-// TEMPLE ESCAPE — Enhanced Edition
-// Level system, expanded world, better combat, equipment
-// Pure vanilla JS
+// TEMPLE ESCAPE — Enhanced Edition (Graphic Max)
 // =====================================================
 
 const LOCATIONS = {
@@ -193,6 +191,12 @@ function updateStatus() {
   $("exp").textContent = state.exp;
   $("exp-next").textContent = state.expToNext;
 
+  // Visual bars
+  const hpPct = Math.max(0, Math.min(100, (state.hp / state.maxHp) * 100));
+  const expPct = Math.max(0, Math.min(100, (state.exp / state.expToNext) * 100));
+  $("hp-bar").style.width = hpPct + "%";
+  $("exp-bar").style.width = expPct + "%";
+
   $("eq-weapon").textContent = state.equipped.weapon ? ITEMS[state.equipped.weapon].name : "None";
   $("eq-armor").textContent = state.equipped.armor ? ITEMS[state.equipped.armor].name : "None";
   $("eq-accessory").textContent = state.equipped.accessory ? ITEMS[state.equipped.accessory].name : "None";
@@ -270,6 +274,14 @@ function render() {
   const msgEl = $("message-log");
   msgEl.textContent = state.message;
   msgEl.className = state.messageType;
+
+  // Combat visual mode
+  const gameArea = $("game-area");
+  if (state.combat) {
+    gameArea.classList.add("combat-mode");
+  } else {
+    gameArea.classList.remove("combat-mode");
+  }
 
   clearChoices();
 
@@ -423,7 +435,7 @@ function useItem(key) {
 
 function renderCombat() {
   const enemy = ENEMIES[state.combat.enemyKey];
-  $("location-title").textContent = `⚔ Combat — ${enemy.name}`;
+  $("location-title").textContent = `⚔ COMBAT — ${enemy.name}`;
   $("description").textContent = `${enemy.desc}\n\nEnemy HP: ${state.combat.enemyHp} / ${enemy.maxHp}`;
 
   clearChoices();
@@ -537,17 +549,17 @@ function showEnding(victory) {
   const btn = $("modal-btn");
 
   if (victory) {
-    title.textContent = "You Escaped!";
+    title.textContent = "YOU ESCAPED";
     let extra = `\n\nFinal Score: ${state.score}`;
-    extra += `\nLevel: ${state.level} | Gold: ${state.gold}`;
+    extra += `\nLevel: ${state.level}  |  Gold: ${state.gold}`;
     if (state.flags.treasureFound) extra += "\n\n✦ You claimed the Ancient Amulet and the full treasure!";
     else extra += "\n\nYou escaped, but left secrets behind.";
     text.textContent = `You have survived the Forgotten Temple.${extra}`;
-    btn.textContent = "Play Again";
+    btn.textContent = "PLAY AGAIN";
   } else {
-    title.textContent = "You Have Fallen";
+    title.textContent = "YOU HAVE FALLEN";
     text.textContent = "The temple claims another soul.\n\nYour adventure ends here.";
-    btn.textContent = "Try Again";
+    btn.textContent = "TRY AGAIN";
   }
 
   modal.classList.remove("hidden");
