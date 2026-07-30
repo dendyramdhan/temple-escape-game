@@ -64,6 +64,12 @@
     <div class="main-row">
       <div id="game-area">
         <div id="location-title">Loading...</div>
+        <div id="enemy-bar-wrap" class="hidden">
+          <div class="bar-label"><span id="enemy-name">Enemy</span><span id="enemy-hp-text">0/0</span></div>
+          <div class="bar-track enemy-track">
+            <div id="enemy-hp-bar" class="bar-fill enemy-fill"></div>
+          </div>
+        </div>
         <div id="description"></div>
         <div id="message-log"></div>
         <div id="choices"></div>
@@ -97,6 +103,7 @@
     <div class="modal-content">
       <div class="modal-glow"></div>
       <h2 id="modal-title"></h2>
+      <div id="rank-badge" class="hidden"></div>
       <p id="modal-text"></p>
       <button id="modal-btn" class="btn primary">CONTINUE</button>
     </div>
